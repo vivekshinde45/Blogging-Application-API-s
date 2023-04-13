@@ -26,10 +26,9 @@ public class UserController {
 
     // POST => Create user
     @PostMapping("/")
-    public ResponseEntity<ApiResponseBody<UserDTO>> create(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
         UserDTO createdUser = this._userService.createUser(userDTO);
-        ApiResponseBody<UserDTO> responseBody = new ApiResponseBody<>("user created successfully", true, createdUser);
-        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     // PUT => Update existing user
@@ -44,9 +43,9 @@ public class UserController {
 
     // DELETE => delete existing user
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponseBody<String>> delete(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<ApiResponseBody> delete(@PathVariable("userId") Integer userId) {
         this._userService.deleteUser(userId);
-        ApiResponseBody<String> responseBody = new ApiResponseBody<>("User deleted successfully", true, "Deleted");
+        ApiResponseBody responseBody = new ApiResponseBody("User deleted successfully", true);
         return ResponseEntity.ok(responseBody);
     }
 

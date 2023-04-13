@@ -27,41 +27,41 @@ public class UserService implements IUserService {
 
     @Override
     public UserDTO updateUser(UserDTO userDto, Integer userId) {
-        try {
-            User user = this._userRepository.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "User",
-                            " Id ",
-                            userId));
-            user.setName(userDto.getName());
-            user.setEmail(userDto.getEmail());
-            user.setAbout(userDto.getAbout());
+        // try {
+        User user = this._userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        " Id ",
+                        userId));
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setAbout(userDto.getAbout());
 
-            // save into DB
-            User savedUser = this._userRepository.save(user);
+        // save into DB
+        User savedUser = this._userRepository.save(user);
 
-            return this.userToDto(savedUser);
+        return this.userToDto(savedUser);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        // } catch (Exception e) {
+        // System.out.println(e.getMessage());
+        // return null;
+        // }
 
     }
 
     @Override
     public UserDTO getUserById(Integer userId) {
-        try {
-            User user = this._userRepository.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "User",
-                            " Id ",
-                            userId));
-            return this.userToDto(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        // try {
+        User user = this._userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        " Id ",
+                        userId));
+        return this.userToDto(user);
+        // } catch (Exception e) {
+        // System.out.println(e.getMessage());
+        // return null;
+        // }
     }
 
     @Override
@@ -77,16 +77,16 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteUser(Integer userId) {
-        try {
-            User user = this._userRepository.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "User",
-                            " Id ",
-                            userId));
-            this._userRepository.delete(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        // try {
+        User user = this._userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        " Id ",
+                        userId));
+        this._userRepository.delete(user);
+        // } catch (Exception e) {
+        // System.out.println(e.getMessage());
+        // }
     }
 
     public User dtoToUser(UserDTO userDTO) {
