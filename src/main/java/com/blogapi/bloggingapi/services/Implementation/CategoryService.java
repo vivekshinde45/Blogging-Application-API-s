@@ -4,24 +4,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blogapi.bloggingapi.entities.Category;
 import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.CategoryDTO;
+import com.blogapi.bloggingapi.payload.CategoryResponse;
 import com.blogapi.bloggingapi.repositories.CategoryRepository;
 import com.blogapi.bloggingapi.services.Interfaces.ICategoryService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class CategoryService implements ICategoryService {
 
     @Autowired
     private CategoryRepository _categoryRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public CategoryDTO create(CategoryDTO categoryDTO) {
@@ -64,6 +63,25 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    public CategoryResponse getByPage(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Category> postRecords = this._categoryRepository.findAll(pageable);
+        List<Category> allPosts = postRecords.getContent();
+
+        List<CategoryDTO> posts = allPosts.stream().map(
+                category -> this.objToDto(category)).collect(Collectors.toList());
+
+        CategoryResponse response = new CategoryResponse();
+        response.setContent(posts);
+        response.setPageNumber(postRecords.getNumber());
+        response.setPageSize(postRecords.getSize());
+        response.setTotalElements(postRecords.getTotalElements());
+        response.setTotalPages(postRecords.getTotalPages());
+        response.setLastPage(postRecords.isLast());
+        return response;
+    }
+
+    @Override
     public CategoryDTO getById(Integer categoryId) {
         Category category = this._categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -74,13 +92,19 @@ public class CategoryService implements ICategoryService {
     }
 
     public Category dtoToObj(CategoryDTO categoryDTO) {
-        return objectMapper.convertValue(categoryDTO, new TypeReference<Category>() {
-        });
+        Category category = new Category();
+        // category.setCategoryId(categoryDTO.getCategoryId());
+        category.setCategoryName(categoryDTO.getCategoryName());
+        category.setCategoryDescription(categoryDTO.getCategoryDescription());
+        return category;
     }
 
     public CategoryDTO objToDto(Category category) {
-        return objectMapper.convertValue(category, new TypeReference<CategoryDTO>() {
-        });
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryId(category.getCategoryId());
+        categoryDTO.setCategoryName(category.getCategoryName());
+        categoryDTO.setCategoryDescription(category.getCategoryDescription());
+        return categoryDTO;
     }
 
 }

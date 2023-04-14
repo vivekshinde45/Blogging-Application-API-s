@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapi.bloggingapi.payload.ApiResponseBody;
 import com.blogapi.bloggingapi.payload.UserDTO;
+import com.blogapi.bloggingapi.payload.UserResponse;
 import com.blogapi.bloggingapi.services.Interfaces.IUserService;
 
 import jakarta.validation.Valid;
@@ -55,6 +57,15 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<List<UserDTO>> getAll() {
         List<UserDTO> users = this._userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    // GET => Get users by page
+    @GetMapping("/page")
+    public ResponseEntity<UserResponse> getByPage(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "3", required = false) Integer pageSize) {
+        UserResponse users = this._userService.getUserByPages(pageNumber, pageSize);
         return ResponseEntity.ok(users);
     }
 
