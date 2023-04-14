@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapi.bloggingapi.payload.ApiResponseBody;
@@ -57,11 +58,20 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    // get all posts
+    // get single posts
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO> getById(@PathVariable("postId") Integer postId) {
         PostDTO post = this._postService.getById(postId);
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    // get posts as per pages
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDTO>> getAllPostByPages(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "3", required = false) Integer pageSize) {
+        List<PostDTO> allPosts = this._postService.getByPage(pageNumber, pageSize);
+        return new ResponseEntity<>(allPosts, HttpStatus.OK);
     }
 
     // get posts by user

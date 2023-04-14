@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blogapi.bloggingapi.entities.Category;
@@ -105,6 +108,16 @@ public class PostService implements IPostService {
                         "Post id",
                         postId));
         return this.objToDto(getSinglePost);
+    }
+
+    @Override
+    public List<PostDTO> getByPage(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> postRecords = this._postRepository.findAll(pageable);
+        List<Post> allPosts = postRecords.getContent();
+
+        return allPosts.stream().map(
+                post -> this.objToDto(post)).collect(Collectors.toList());
     }
 
     @Override
