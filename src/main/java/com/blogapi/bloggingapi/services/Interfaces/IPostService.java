@@ -19,7 +19,7 @@ public interface IPostService {
     List<PostDTO> getAll();
 
     // get as per pagenation
-    PostResponse getByPage(Integer pageNumber, Integer pageSize);
+    PostResponse getByPage(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     // get by ID
     PostDTO getById(Integer postId);
