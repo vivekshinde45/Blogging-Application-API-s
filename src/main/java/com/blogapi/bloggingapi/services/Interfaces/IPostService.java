@@ -29,4 +29,7 @@ public interface IPostService {
 
     // get all by categories
     List<PostDTO> getAllByCategories(Integer categoryId);
+
+    // get by search
+    List<PostDTO> search(String keyword);
 }

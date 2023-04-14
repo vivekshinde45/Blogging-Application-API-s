@@ -119,7 +119,9 @@ public class PostService implements IPostService {
             String sortBy,
             String sortDir) {
 
-        Sort sort = null;
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
         if (!sortDir.isBlank() && sortDir.equalsIgnoreCase("asc")) {
             sort = Sort.by(sortBy).ascending();
         } else {
@@ -177,6 +179,13 @@ public class PostService implements IPostService {
         List<PostDTO> posts = postsByUser.stream().map(
                 post -> this.objToDto(post)).collect(Collectors.toList());
         return posts;
+    }
+
+    @Override
+    public List<PostDTO> search(String keyword) {
+        List<Post> searchResult = this._postRepository.findByTitleContaining(keyword);
+        return searchResult.stream().map(
+                post -> this.objToDto(post)).collect(Collectors.toList());
     }
 
     public Post dtoToObj(PostDTO postDTO) {
