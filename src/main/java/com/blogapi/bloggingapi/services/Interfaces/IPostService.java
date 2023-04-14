@@ -3,6 +3,7 @@ package com.blogapi.bloggingapi.services.Interfaces;
 import java.util.List;
 
 import com.blogapi.bloggingapi.payload.PostDTO;
+import com.blogapi.bloggingapi.payload.PostResponse;
 
 public interface IPostService {
     // create
@@ -18,7 +19,7 @@ public interface IPostService {
     List<PostDTO> getAll();
 
     // get as per pagenation
-    List<PostDTO> getByPage(Integer pageNumber, Integer pageSize);
+    PostResponse getByPage(Integer pageNumber, Integer pageSize);
 
     // get by ID
     PostDTO getById(Integer postId);

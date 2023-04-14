@@ -15,6 +15,7 @@ import com.blogapi.bloggingapi.entities.Post;
 import com.blogapi.bloggingapi.entities.User;
 import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.PostDTO;
+import com.blogapi.bloggingapi.payload.PostResponse;
 import com.blogapi.bloggingapi.repositories.CategoryRepository;
 import com.blogapi.bloggingapi.repositories.PostRepository;
 import com.blogapi.bloggingapi.repositories.UserRepository;
@@ -111,13 +112,22 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostDTO> getByPage(Integer pageNumber, Integer pageSize) {
+    public PostResponse getByPage(Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Post> postRecords = this._postRepository.findAll(pageable);
         List<Post> allPosts = postRecords.getContent();
 
-        return allPosts.stream().map(
+        List<PostDTO> posts = allPosts.stream().map(
                 post -> this.objToDto(post)).collect(Collectors.toList());
+
+        PostResponse response = new PostResponse();
+        response.setContent(posts);
+        response.setPageNumber(postRecords.getNumber());
+        response.setPageSize(postRecords.getSize());
+        response.setTotalElements(postRecords.getTotalElements());
+        response.setTotalPages(postRecords.getTotalPages());
+        response.setLastPage(postRecords.isLast());
+        return response;
     }
 
     @Override

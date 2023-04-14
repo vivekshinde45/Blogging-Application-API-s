@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapi.bloggingapi.payload.ApiResponseBody;
 import com.blogapi.bloggingapi.payload.PostDTO;
+import com.blogapi.bloggingapi.payload.PostResponse;
 import com.blogapi.bloggingapi.services.Implementation.PostService;
 
 import jakarta.validation.Valid;
@@ -67,10 +68,10 @@ public class PostController {
 
     // get posts as per pages
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDTO>> getAllPostByPages(
+    public ResponseEntity<PostResponse> getAllPostByPages(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "3", required = false) Integer pageSize) {
-        List<PostDTO> allPosts = this._postService.getByPage(pageNumber, pageSize);
+        PostResponse allPosts = this._postService.getByPage(pageNumber, pageSize);
         return new ResponseEntity<>(allPosts, HttpStatus.OK);
     }
 
