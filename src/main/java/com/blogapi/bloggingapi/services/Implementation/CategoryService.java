@@ -11,17 +11,12 @@ import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.CategoryDTO;
 import com.blogapi.bloggingapi.repositories.CategoryRepository;
 import com.blogapi.bloggingapi.services.Interfaces.ICategoryService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class CategoryService implements ICategoryService {
 
     @Autowired
     private CategoryRepository _categoryRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public CategoryDTO create(CategoryDTO categoryDTO) {
@@ -74,13 +69,19 @@ public class CategoryService implements ICategoryService {
     }
 
     public Category dtoToObj(CategoryDTO categoryDTO) {
-        return objectMapper.convertValue(categoryDTO, new TypeReference<Category>() {
-        });
+        Category category = new Category();
+        // category.setCategoryId(categoryDTO.getCategoryId());
+        category.setCategoryName(categoryDTO.getCategoryName());
+        category.setCategoryDescription(categoryDTO.getCategoryDescription());
+        return category;
     }
 
     public CategoryDTO objToDto(Category category) {
-        return objectMapper.convertValue(category, new TypeReference<CategoryDTO>() {
-        });
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryId(category.getCategoryId());
+        categoryDTO.setCategoryName(category.getCategoryName());
+        categoryDTO.setCategoryDescription(category.getCategoryDescription());
+        return categoryDTO;
     }
 
 }

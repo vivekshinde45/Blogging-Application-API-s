@@ -11,17 +11,12 @@ import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.UserDTO;
 import com.blogapi.bloggingapi.repositories.UserRepository;
 import com.blogapi.bloggingapi.services.Interfaces.IUserService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
     private UserRepository _userRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public UserDTO createUser(UserDTO userDto) {
@@ -95,13 +90,23 @@ public class UserService implements IUserService {
     }
 
     public User dtoToUser(UserDTO userDTO) {
-        return objectMapper.convertValue(userDTO, new TypeReference<User>() {
-        });
+        User user = new User();
+        // user.setId(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setPassword(userDTO.getPassword());
+        user.setEmail(userDTO.getEmail());
+        user.setAbout(userDTO.getAbout());
+        return user;
     }
 
     public UserDTO userToDto(User user) {
-        return objectMapper.convertValue(user, new TypeReference<UserDTO>() {
-        });
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAbout(user.getAbout());
+        return userDTO;
     }
 
 }
