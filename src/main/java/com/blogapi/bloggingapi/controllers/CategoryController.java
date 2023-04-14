@@ -45,7 +45,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseBody> delete(@PathVariable("id") Integer id) {
         this._categoryService.delete(id);
-        ApiResponseBody responseBody = new ApiResponseBody("User deleted successfully", true);
+        ApiResponseBody responseBody = new ApiResponseBody("Category deleted successfully", true);
         return ResponseEntity.ok(responseBody);
     }
 
@@ -58,7 +58,7 @@ public class CategoryController {
 
     // GETbyID
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getById(@PathVariable("Id") Integer id) {
+    public ResponseEntity<CategoryDTO> getById(@PathVariable("id") Integer id) {
         CategoryDTO user = this._categoryService.getById(id);
         if (user != null) {
             return ResponseEntity.ok(user);

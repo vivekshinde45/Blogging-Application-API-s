@@ -12,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryDTO {
+    private Integer categoryId;
+
     @NotBlank
     @Size(min = 4, message = "Name should be more than 3 characters")
     private String categoryName;
