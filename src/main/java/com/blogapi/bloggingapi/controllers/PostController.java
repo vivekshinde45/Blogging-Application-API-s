@@ -5,13 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogapi.bloggingapi.payload.ApiResponseBody;
 import com.blogapi.bloggingapi.payload.PostDTO;
 import com.blogapi.bloggingapi.services.Implementation.PostService;
 
@@ -30,6 +33,21 @@ public class PostController {
             @PathVariable("categoryId") Integer categoryId) {
         PostDTO createdUser = this._postService.create(postDTO, userId, categoryId);
         return new ResponseEntity<PostDTO>(createdUser, HttpStatus.CREATED);
+    }
+
+    // update
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDTO> update(@Valid @RequestBody PostDTO postDTO, @PathVariable("postId") Integer postId) {
+        PostDTO updatedPost = this._postService.update(postDTO, postId);
+        return new ResponseEntity<PostDTO>(updatedPost, HttpStatus.OK);
+    }
+
+    // delete
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponseBody> delete(@PathVariable("postId") Integer postId) {
+        this._postService.delete(postId);
+        return new ResponseEntity<ApiResponseBody>(new ApiResponseBody("Post deleted successfully", true),
+                HttpStatus.OK);
     }
 
     // get all posts

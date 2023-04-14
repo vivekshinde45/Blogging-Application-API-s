@@ -2,9 +2,6 @@ package com.blogapi.bloggingapi.payload;
 
 import java.util.Date;
 
-import com.blogapi.bloggingapi.entities.Category;
-import com.blogapi.bloggingapi.entities.User;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

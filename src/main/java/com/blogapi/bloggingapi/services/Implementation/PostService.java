@@ -54,9 +54,9 @@ public class PostService implements IPostService {
         post.setAddedDate(new Date());
         post.setCategory(category);
         post.setUser(user);
-        if (post.getImgName().equals(null)) {
-            post.setImgName("default.png");
-        }
+        // if (post.getImgName().length() == 0) {
+        post.setImgName("default.png");
+        // }
 
         // save to DB
         Post savedPost = this._postRepository.save(post);
@@ -66,14 +66,28 @@ public class PostService implements IPostService {
 
     @Override
     public PostDTO update(PostDTO postDTO, Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        Post post = this._postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Post",
+                        "Post id",
+                        postId));
+        post.setTitle(postDTO.getTitle());
+        post.setContent(post.getContent());
+        // if (postDTO.getImgName().length() == 0) {
+        post.setImgName(postDTO.getImgName());
+        // }
+        Post updatedPost = this._postRepository.save(post);
+        return this.objToDto(updatedPost);
     }
 
     @Override
     public void delete(Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        Post post = this._postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Post",
+                        "Post id",
+                        postId));
+        this._postRepository.delete(post);
     }
 
     @Override
