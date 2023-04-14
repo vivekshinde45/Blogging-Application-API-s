@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapi.bloggingapi.payload.ApiResponseBody;
 import com.blogapi.bloggingapi.payload.CategoryDTO;
+import com.blogapi.bloggingapi.payload.CategoryResponse;
 import com.blogapi.bloggingapi.services.Implementation.CategoryService;
 
 import jakarta.validation.Valid;
@@ -53,6 +55,14 @@ public class CategoryController {
     @GetMapping("/")
     public ResponseEntity<List<CategoryDTO>> getAll() {
         List<CategoryDTO> users = this._categoryService.getAll();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<CategoryResponse> getByPages(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "3", required = false) Integer pageSize) {
+        CategoryResponse users = this._categoryService.getByPage(pageNumber, pageSize);
         return ResponseEntity.ok(users);
     }
 

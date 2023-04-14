@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blogapi.bloggingapi.entities.User;
 import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.UserDTO;
+import com.blogapi.bloggingapi.payload.UserResponse;
 import com.blogapi.bloggingapi.repositories.UserRepository;
 import com.blogapi.bloggingapi.services.Interfaces.IUserService;
 
@@ -62,6 +66,25 @@ public class UserService implements IUserService {
         // System.out.println(e.getMessage());
         // return null;
         // }
+    }
+
+    @Override
+    public UserResponse getUserByPages(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<User> postRecords = this._userRepository.findAll(pageable);
+        List<User> allPosts = postRecords.getContent();
+
+        List<UserDTO> posts = allPosts.stream().map(
+                user -> this.userToDto(user)).collect(Collectors.toList());
+
+        UserResponse response = new UserResponse();
+        response.setContent(posts);
+        response.setPageNumber(postRecords.getNumber());
+        response.setPageSize(postRecords.getSize());
+        response.setTotalElements(postRecords.getTotalElements());
+        response.setTotalPages(postRecords.getTotalPages());
+        response.setLastPage(postRecords.isLast());
+        return response;
     }
 
     @Override

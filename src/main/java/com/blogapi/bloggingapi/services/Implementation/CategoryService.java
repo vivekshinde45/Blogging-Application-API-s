@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blogapi.bloggingapi.entities.Category;
 import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
 import com.blogapi.bloggingapi.payload.CategoryDTO;
+import com.blogapi.bloggingapi.payload.CategoryResponse;
 import com.blogapi.bloggingapi.repositories.CategoryRepository;
 import com.blogapi.bloggingapi.services.Interfaces.ICategoryService;
 
@@ -56,6 +60,25 @@ public class CategoryService implements ICategoryService {
         List<CategoryDTO> categoryDTOs = categories.stream().map(
                 category -> this.objToDto(category)).collect(Collectors.toList());
         return categoryDTOs;
+    }
+
+    @Override
+    public CategoryResponse getByPage(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Category> postRecords = this._categoryRepository.findAll(pageable);
+        List<Category> allPosts = postRecords.getContent();
+
+        List<CategoryDTO> posts = allPosts.stream().map(
+                category -> this.objToDto(category)).collect(Collectors.toList());
+
+        CategoryResponse response = new CategoryResponse();
+        response.setContent(posts);
+        response.setPageNumber(postRecords.getNumber());
+        response.setPageSize(postRecords.getSize());
+        response.setTotalElements(postRecords.getTotalElements());
+        response.setTotalPages(postRecords.getTotalPages());
+        response.setLastPage(postRecords.isLast());
+        return response;
     }
 
     @Override
