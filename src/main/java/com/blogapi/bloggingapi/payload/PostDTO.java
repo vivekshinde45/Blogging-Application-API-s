@@ -1,6 +1,8 @@
 package com.blogapi.bloggingapi.payload;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -31,4 +33,6 @@ public class PostDTO {
     private CategoryDTO category;
 
     private UserDTO user;
+
+    private Set<CommentDTO> comments = new HashSet<>();
 }
