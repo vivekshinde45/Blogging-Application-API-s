@@ -13,4 +13,8 @@ public class CommentDTO {
 
     @NotBlank(message = "Comment should not be blank")
     private String content;
+
+    private UserDTO user;
+
+    private Integer postId;
 }
