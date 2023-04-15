@@ -2,6 +2,7 @@ package com.blogapi.bloggingapi.services.Implementation;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.blogapi.bloggingapi.entities.Category;
 import com.blogapi.bloggingapi.entities.Post;
 import com.blogapi.bloggingapi.entities.User;
 import com.blogapi.bloggingapi.exceptions.ResourceNotFoundException;
+import com.blogapi.bloggingapi.payload.CommentDTO;
 import com.blogapi.bloggingapi.payload.PostDTO;
 import com.blogapi.bloggingapi.payload.PostResponse;
 import com.blogapi.bloggingapi.repositories.CategoryRepository;
@@ -39,6 +41,9 @@ public class PostService implements IPostService {
 
     @Autowired
     private CategoryService _categoryService;
+
+    @Autowired
+    private CommentService _commentService;
 
     @Override
     public PostDTO create(PostDTO postDTO, Integer userId, Integer categoryId) {
@@ -208,6 +213,12 @@ public class PostService implements IPostService {
         postDTO.setImgName(post.getImgName());
         postDTO.setUser(this._userService.userToDto(post.getUser()));
         postDTO.setCategory(this._categoryService.objToDto(post.getCategory()));
+
+        Set<CommentDTO> postCommentsDto = post.getComments().stream().map(
+                postComment -> this._commentService.objToDto(postComment))
+                .collect(Collectors.toSet());
+
+        postDTO.setComments(postCommentsDto);
         return postDTO;
     }
 
