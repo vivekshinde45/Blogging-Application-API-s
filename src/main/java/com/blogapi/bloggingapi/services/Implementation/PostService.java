@@ -127,11 +127,11 @@ public class PostService implements IPostService {
         Sort sort = sortDir.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-        if (!sortDir.isBlank() && sortDir.equalsIgnoreCase("asc")) {
-            sort = Sort.by(sortBy).ascending();
-        } else {
-            sort = Sort.by(sortBy).descending();
-        }
+//         if (!sortDir.isBlank() && sortDir.equalsIgnoreCase("asc")) {
+//             sort = Sort.by(sortBy).ascending();
+//         } else {
+//             sort = Sort.by(sortBy).descending();
+//         }
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> postRecords = this._postRepository.findAll(pageable);
